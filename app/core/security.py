@@ -44,7 +44,7 @@ payload: dict[str, Any] = {
     "exp": expire,       # expiration
 }
 
-return jwt.encode(payload, settings.secret_key, algorithm = ALGORITHM)
+return jwt.encode(payload, settings.secrett_key, algorithm = ALGORITHM)
 
 def decode_access_token(token: str) -> dict[str, Any] | None:
     """Decodifica e valida um JWT token. Retorna None se inválido"""
