@@ -32,19 +32,18 @@ def create_access_token(
 ) -> str:
     """Cria um JWT token com expiração."""
 
-# datetime.now com timezone UTC - usar sempre timezone-aware
-now = datetime.now(timezone.utc)
+    # datetime.now com timezone UTC - usar sempre timezone-aware
+    now = datetime.now(timezone.utc)
 
-expire = now + (expires_delta if expires_delta else timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
+    expire = now + (expires_delta if expires_delta else timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
 
-# Dicionário com os dados do token(payload em JWT)
-payload: dict[str, Any] = {
-    "sub": str(subject), # normalmente o ID do utilizador
-    "iat": now,          # issued at
-    "exp": expire,       # expiration
-}
-
-return jwt.encode(payload, settings.secret_key, algorithm = ALGORITHM)
+    # Dicionário com os dados do token(payload em JWT)
+    payload: dict[str, Any] = {
+        "sub": str(subject), # normalmente o ID do utilizador
+        "iat": now,          # issued at
+        "exp": expire,       # expiration
+    }
+    return jwt.encode(payload, settings.secret_key, algorithm = ALGORITHM)
 
 def decode_access_token(token: str) -> dict[str, Any] | None:
     """Decodifica e valida um JWT token. Retorna None se inválido"""

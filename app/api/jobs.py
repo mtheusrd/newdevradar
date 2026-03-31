@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.schemas.job import JobCreate, JobUpdate, JobResponse, JobListResponse
 from app.services.job_service import JobService
+from app.services.scraper_service import ScraperService
 
 # APIRouter agrupa os endpoints
 # prefix - todos os endpoints começam como /jobs
@@ -55,3 +56,12 @@ def delete_job(job_id: int, service: JobService = Depends(get_service)):
     """Remove uma vaga"""
     if not service.delete(job_id):
         raise HTTPException(status_code=404, detail="Vaga não encontrada")
+    
+
+
+@router.post("/scrape", tags=["scraper"])
+async def run_scraper(db: Session = Depends(get_db)):
+    """Dispara o scraper manualmente e grava as vagas encontradas."""
+    service = ScraperService(db)
+    results = await service.run_all()
+    return {"status": "done", "results": results}
