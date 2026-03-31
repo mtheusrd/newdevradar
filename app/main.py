@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from app.core.config import settings
+from app.api.jobs import router as jobs_router
 
 
 @asynccontextmanager
@@ -11,19 +12,22 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="DevRadar API",
-    description="Agregador de vagas tech",
-    version="0.1.0",
-    lifespan=lifespan,  
+    title=settings.app_name,
+    description=settings.app_description,
+    version=settings.app_version,
+    lifespan=lifespan,
 )
+
+app.include_router(jobs_router)
 
 
 @app.get("/", tags=["health"])
 async def root() -> dict:
     return {
-        "app": "DevRadar",
+        "app": settings.app_name,
+        "version": settings.app_version,
         "status": "online",
-        "version": "0.1.0",
+        "debug": settings.debug,
     }
 
 

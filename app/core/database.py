@@ -7,7 +7,7 @@ from app.core.config import settings
 # Engine conexao com a BD
 # echo=True imprime o SQL no terminal(debug)
 engine = create_engine(
-    settings.database.url,
+    settings.database_url,
     echo=settings.debug,
 )
 
@@ -26,5 +26,5 @@ def get_db() -> Generator[Session, None, None]:
     db = SessionLocal()
     try:
         yield db
-    finally
+    finally:
         db.close()
